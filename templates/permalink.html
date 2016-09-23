@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{post.render() | safe}}
+  <br>
+  <form method="post">
+  {% if username != post.author %}
+		{% if likes.liked == false or likes.liked_before == false %}
+			<input type="submit" name="Like" value="Like">
+		{% else %}
+			<input type="submit" name="Dislike" value="Dislike">
+		{% endif %}
+	{% endif %}
+	</form>
+	<br>
+	{% if username == post.author %}
+		<a class="edit-button" href="/blog/edit?post={{post.key().id()}}">Edit</a>
+		<a class="delete-button" href="/blog/delete?post={{post.key().id()}}">Delete</a>
+	{% endif %}
+	<br><br>
+	<form>
+	<h3><u>Comments:</u></h3>
+	<br>
+	{% for c in comments %}
+		{{c.render() | safe}}
+	{% endfor %}
+	<br>
+		<textarea name="content"></textarea>
+		<br>
+		<input type="submit">
+	</form>
+	<br> 
+	<!-- <a href="/blog/comment/?={{post.key().id()}}">Comment</a> -->
+	</div>
+{% endblock %}
