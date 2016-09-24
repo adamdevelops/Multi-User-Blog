@@ -1,8 +1,16 @@
+
 body {
     position: relative;
     font-family: Helvetica, Arial, sans-serif;
     font-size: 14px;
-
+	
+	background: url(img/space.jpg) no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	
+    background-color: #cccccc;
     width: 800px;
     margin: 0 auto;
     padding: 10px;
@@ -84,6 +92,7 @@ input[type=submit] {
     text-align: center;
     margin-bottom: 30px;
     text-decoration: none;
+	color: blue;
 }
 
 .post + .post {
@@ -98,6 +107,7 @@ input[type=submit] {
 .post-title {
     font-size: 24px;
     font-weight: bold;
+	color: #00FFFF;
 }
 
 .post-date {
@@ -111,5 +121,6 @@ input[type=submit] {
 .post-content {
     margin-top: 5px;
 	font-style: monospace;
+	color: #00FFFF;
 }
 
