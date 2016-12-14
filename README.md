@@ -1,7 +1,6 @@
 Udacity Multi-User Blog Project
 By AdamH
 
-Multi-User Blog
 
 This is a project created through Udacity's Full Stack Nanodegree to have an intro to backend web developement programming. The project consists of a multi-user blog where users can sign in to create posts or comment on other posts as well as like other user's posts. This Multi-user Blog will combine the coding skills of python to execute the front-end actions and GQL (Google's Query Language) to perform saving/exchange of data in the backend. This site will be hosted on Google App Engine.
 
@@ -9,8 +8,11 @@ Check out live version here:
 http://multi-userblog.appspot.com/
 
 Technlogies Used:
+
 Python 2.7
+
 Bootstrap
+
 Google App Engine
 
 Project Specifications:
