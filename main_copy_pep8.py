@@ -130,9 +130,6 @@ class PostPage(BlogHandler):
                     liked=liked, comments=comments, username=self.user)
 
     def post(self, post_id):
-        if not self.user:
-            return self.redirect('/login')
-        
         # post_id = self.request.get("post")
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
@@ -186,14 +183,6 @@ class EditPostPage(BlogHandler):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
 
-        #Make sure a user is logged in
-        if not self.user:
-            return self.redirect('/login')
-        #Make sure it is the user is the author of the post.
-        if self.user != post.author:
-            return self.redirect('/login')
-            
-
         if not post:
             self.error(404)
             return
@@ -201,12 +190,8 @@ class EditPostPage(BlogHandler):
         self.render("edit-post.html", post=post, username=self.user)
 
     def post(self):
-        #Make sure a user is logged in
         if not self.user:
-            return self.redirect('/login')
-        #Make sure it is the user is the author of the post.
-        if self.user != post.author:
-            return self.redirect('/login')
+            self.redirect('/login')
 
         # Retrieve the user's input from the form
         subject = self.request.get('subject')
@@ -238,110 +223,17 @@ class DeletePostPage(BlogHandler):
     the Blog's database.'''
 
     def get(self):
-        #Make sure a user is logged in
-        if not self.user:
-            return self.redirect('/login')
-        #Make sure it is the user is the author of the post.
-        if self.user != post.author:
-            return self.redirect('/login')
-        
         self.render("delete-post.html", username=self.user)
 
     def post(self):
-        #Make sure a user is logged in
         if not self.user:
-            return self.redirect('/login')
-        #Make sure it is the user is the author of the post.
-        if self.user != post.author:
-            return self.redirect('/login')
+            return self.redirect('/blog')
 
         # Delete the users post from the Post DB
         post_id = self.request.get("post")
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
         post.delete()
-        self.redirect('/blog')
-
-class EditCommentPage(BlogHandler):
-    '''EditComment Page is used to edit a comment on a post by
-    its original author.'''
-
-    def get(self):        
-        comment_id = self.request.get("comment")
-        key = db.Key.from_path('Comment', int(comment_id), parent=blog_key())
-        comment = db.get(key)
-
-        #Make sure a user is logged in
-        if not self.user:
-            return self.redirect('/login')
-        #Make sure it is the user is the author of the post.
-        if self.user != post.author:
-            return self.redirect('/login')
-
-        if not comment:
-            self.error(404)
-            return
-
-        self.render("edit-comment.html", comment=comment, username=self.user)
-
-    def post(self):
-        #Make sure a user is logged in
-        if not self.user:
-            return self.redirect('/login')
-        #Make sure it is the user is the author of the post.
-        if self.user != post.author:
-            return self.redirect('/login')
-
-        # Retrieve the user's input from the form
-        content = self.request.get('content')
-        a = self.request.cookies.get('user_id')
-        uid = check_secure_val(a)
-        author = Users.by_id(int(uid))
-
-        # Obtain the exact post that the user wants to edit
-        comment_id = self.request.get("comment")
-        key = db.Key.from_path('Comment', int(comment_id), parent=blog_key())
-        comment = db.get(key)
-
-        # Finish the edit to the comment if there is a subject and/or content.
-        # Otherwise, ask the user to enter a subject and/or content.
-        if content:
-            comment.content = content
-            comment.put()
-            self.redirect('/blog/%s' % str(comment.post_id))
-        else:
-            error = "Content, please!"
-            self.render("edit-comment.html", content=content,
-                        error=error)
-
-
-class DeleteCommentPage(BlogHandler):
-    '''DeleteComment Page is used to delete a user's comment on blog posts from
-    the Blog's database.'''
-
-    def get(self):
-        #Make sure a user is logged in
-        if not self.user:
-            return self.redirect('/login')
-        #Make sure it is the user is the author of the post.
-        if self.user != post.author:
-            return self.redirect('/login')
-
-        self.render("delete-comment.html", username=self.user)
-
-    def post(self):
-        #Make sure a user is logged in
-        if not self.user:
-            return self.redirect('/login')
-        #Make sure it is the user is the author of the post.
-        if self.user != post.author:
-            return self.redirect('/login')
-
-        # Delete the users post from the Post DB
-        comment_id = self.request.get("comment")
-        key = db.Key.from_path('Comment', int(comment_id), parent=blog_key())
-        comment = db.get(key)
-        comment.delete()
         self.redirect('/blog')
 
 
@@ -522,8 +414,6 @@ app = webapp2.WSGIApplication([('/', BlogFront),
                                ('/blog/([0-9]+)', PostPage),
                                ('/blog/newpost', NewPost),
                                ('/blog/edit?', EditPostPage),
-                               ('/blog/delete?', DeletePostPage),
-                               ('/blog/editcomment?', EditCommentPage),
-                               ('/blog/deletecomment?', DeleteCommentPage)
+                               ('/blog/delete?', DeletePostPage)
                                ],
                               debug=True)

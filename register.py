@@ -1,4 +1,3 @@
-import os
 import re
 from string import letters
 import random

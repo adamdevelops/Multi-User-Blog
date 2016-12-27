@@ -1,4 +1,3 @@
-import os
 import re
 from string import letters
 import random
@@ -10,5 +9,8 @@ import webapp2
 from main import *
 from google.appengine.ext import db
 
-class Likes(db.model):
-    likes = db.IntegerProperty()
+#Database model for the Likes of posts
+class Like(db.Model):
+    user = db.StringProperty()
+    post_id = db.IntegerProperty(required=True)
+    last_liked = db.DateTimeProperty(auto_now=True)
